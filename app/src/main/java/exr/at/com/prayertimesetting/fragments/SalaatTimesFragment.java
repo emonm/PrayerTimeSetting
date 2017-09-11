@@ -1,0 +1,170 @@
+package exr.at.com.prayertimesetting.fragments;
+
+
+import android.app.Activity;
+import android.app.Fragment;
+import android.content.Intent;
+import android.location.Location;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import java.util.LinkedHashMap;
+import java.util.TimeZone;
+
+import exr.at.com.prayertimesetting.Constants;
+import exr.at.com.prayertimesetting.R;
+import exr.at.com.prayertimesetting.SetAlarmActivity;
+import exr.at.com.prayertimesetting.scheduler.RamadanAlarmReceiver;
+import exr.at.com.prayertimesetting.scheduler.SalaatAlarmReceiver;
+import exr.at.com.prayertimesetting.util.AppSettings;
+import exr.at.com.prayertimesetting.util.PrayTime;
+
+
+public class SalaatTimesFragment extends Fragment implements Constants {
+  private static boolean sIsAlarmInit = false;
+  int mIndex = 0;
+  Location mLastLocation;
+  TextView mAlarm;
+  View mRamadanContainer;
+
+  public static SalaatTimesFragment newInstance(int index, Location location) {
+    SalaatTimesFragment fragment = new SalaatTimesFragment();
+    Bundle args = new Bundle();
+    args.putInt(EXTRA_ALARM_INDEX, index);
+    args.putParcelable(EXTRA_LAST_LOCATION, location);
+    fragment.setArguments(args);
+    return fragment;
+  }
+
+  public SalaatTimesFragment() {
+    // Required empty public constructor
+  }
+
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    if (getArguments() != null) {
+      mIndex = getArguments().getInt(EXTRA_ALARM_INDEX);
+      mLastLocation = (Location) getArguments().getParcelable(EXTRA_LAST_LOCATION);
+    }
+  }
+
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                           Bundle savedInstanceState) {
+    // Inflate the layout for this fragment
+    View view = inflater.inflate(R.layout.fragment_salaat_times, container, false);
+    init(view);
+    return view;
+  }
+
+  protected void init(View view) {
+
+    if (mLastLocation == null) {
+      return;
+    }
+    LinkedHashMap<String, String> prayerTimes =
+        PrayTime.getPrayerTimes(getActivity(), mIndex, mLastLocation.getLatitude(), mLastLocation.getLongitude());
+
+    TextView title = (TextView) view.findViewById(R.id.card_title);
+    title.setText(TimeZone.getDefault().getID());
+
+    TextView fajr = (TextView) view.findViewById(R.id.fajr);
+    TextView dhuhr = (TextView) view.findViewById(R.id.dhuhr);
+    TextView asr = (TextView) view.findViewById(R.id.asr);
+    TextView maghrib = (TextView) view.findViewById(R.id.maghrib);
+    TextView isha = (TextView) view.findViewById(R.id.isha);
+    TextView sunrise = (TextView) view.findViewById(R.id.sunrise);
+    TextView sunset = (TextView) view.findViewById(R.id.sunset);
+    mAlarm = (TextView) view.findViewById(R.id.alarm);
+    mRamadanContainer = view.findViewById(R.id.ramadan_container);
+
+    fajr.setText(prayerTimes.get(String.valueOf(fajr.getTag())));
+    dhuhr.setText(prayerTimes.get(String.valueOf(dhuhr.getTag())));
+    asr.setText(prayerTimes.get(String.valueOf(asr.getTag())));
+    maghrib.setText(prayerTimes.get(String.valueOf(maghrib.getTag())));
+    isha.setText(prayerTimes.get(String.valueOf(isha.getTag())));
+    sunrise.setText(prayerTimes.get(String.valueOf(sunrise.getTag())));
+    sunset.setText(prayerTimes.get(String.valueOf(sunset.getTag())));
+    Log.w("Times",prayerTimes.get(String.valueOf(fajr.getTag())));
+
+    //set text for the first card.
+    setAlarmButtonText(mAlarm, mIndex);
+    setAlarmButtonClickListener(mAlarm, mIndex);
+
+    if (!sIsAlarmInit) {
+      if (AppSettings.getInstance().isDefaultSet()) {
+        AppSettings.getInstance().setLatFor(mIndex, mLastLocation.getLatitude());
+        AppSettings.getInstance().setLngFor(mIndex, mLastLocation.getLongitude());
+        updateAlarmStatus();
+        sIsAlarmInit = true;
+      }
+    }
+  }
+  private void setAlarmButtonText(TextView button, int index) {
+    boolean isAlarmSet = AppSettings.getInstance(getActivity()).isAlarmSetFor(index);
+    int isAlarmSetInt = isAlarmSet ? 0 : 1;
+    String buttonText = getResources().getQuantityString(R.plurals.button_alarm, isAlarmSetInt);
+    button.setText(buttonText);
+    boolean isRamadanSet = AppSettings.getInstance(getActivity()).getBoolean(AppSettings.Key.IS_RAMADAN);
+    mRamadanContainer.setVisibility(isRamadanSet? View.VISIBLE : View.GONE);
+  }
+
+
+  private void setAlarmButtonClickListener(TextView alarm, int index) {
+    alarm.setOnClickListener(new View.OnClickListener() {
+      int index = 0;
+
+      @Override
+      public void onClick(View v) {
+        AppSettings settings = AppSettings.getInstance(getActivity());
+        settings.setLatFor(mIndex, mLastLocation.getLatitude());
+        settings.setLngFor(mIndex, mLastLocation.getLongitude());
+        Intent intent = new Intent(getActivity(), SetAlarmActivity.class);
+        intent.putExtra(EXTRA_ALARM_INDEX, index);
+        startActivityForResult(intent, REQUEST_SET_ALARM);
+      }
+
+      public View.OnClickListener init(int index) {
+        this.index = index;
+        return this;
+      }
+
+    }.init(index));
+  }
+
+  private void updateAlarmStatus() {
+    setAlarmButtonText(mAlarm, mIndex);
+
+    AppSettings settings = AppSettings.getInstance(getActivity());
+
+    SalaatAlarmReceiver sar = new SalaatAlarmReceiver();
+    boolean isAlarmSet = settings.isAlarmSetFor(mIndex);
+    sar.cancelAlarm(getActivity());
+    if (isAlarmSet) {
+      sar.setAlarm(getActivity());
+    }
+
+    RamadanAlarmReceiver rar = new RamadanAlarmReceiver();
+    boolean isRamadanAlarmSet = settings.getBoolean(AppSettings.Key.IS_RAMADAN);
+    rar.cancelAlarm(getActivity());
+    if (isRamadanAlarmSet) {
+      rar.setAlarm(getActivity());
+    }
+  }
+
+  @Override
+  public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    if (requestCode == REQUEST_SET_ALARM) {
+      if (resultCode == Activity.RESULT_OK) {
+        updateAlarmStatus();
+      } else {
+        super.onActivityResult(requestCode, resultCode, data);
+      }
+    }
+  }
+}

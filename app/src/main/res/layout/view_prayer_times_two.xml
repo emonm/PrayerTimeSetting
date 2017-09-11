@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    android:id="@+id/card_view"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="@dimen/card_width"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginTop="@dimen/space_half"
+    card_view:cardCornerRadius="4dp"
+    card_view:cardElevation="@dimen/space_half">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include layout="@layout/view_card_title" />
+
+            <LinearLayout
+                style="@style/Widget.TimeRow.Separator"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="@string/sunrise" />
+
+                <TextView
+                    android:id="@+id/sunrise"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:tag="@string/sunrise" />
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/Widget.TimeRow.Separator"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="@string/sunset" />
+
+                <TextView
+                    android:id="@+id/sunset"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:tag="@string/sunset" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/space"
+                android:paddingRight="@dimen/space">
+
+                <LinearLayout
+                    style="@style/Widget.TimeCol"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView"
+                        style="@style/Widget.TimeCol.Title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableBottom="@drawable/icon_fajr_opt2"
+                        android:gravity="center"
+                        android:text="@string/fajr" />
+
+                    <TextView
+                        android:id="@+id/fajr"
+                        style="@style/Widget.TimeCol.Body"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:tag="@string/fajr"
+                        android:text="0:00" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    style="@style/Widget.TimeCol"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView2"
+                        style="@style/Widget.TimeCol.Title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableBottom="@drawable/icon_dhuhr_opt2"
+                        android:gravity="center"
+                        android:text="@string/dhuhr" />
+
+                    <TextView
+                        android:id="@+id/dhuhr"
+                        style="@style/Widget.TimeCol.Body"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:tag="@string/dhuhr"
+                        android:text="0:00" />
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/Widget.TimeCol"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/Widget.TimeCol.Title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableBottom="@drawable/icon_asr_opt2"
+                        android:gravity="center"
+                        android:text="@string/asr" />
+
+                    <TextView
+                        android:id="@+id/asr"
+                        style="@style/Widget.TimeCol.Body"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:tag="@string/asr"
+                        android:text="0:00" />
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/Widget.TimeCol"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/Widget.TimeCol.Title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableBottom="@drawable/icon_maghrib_opt2"
+                        android:gravity="center"
+                        android:text="@string/maghrib" />
+
+                    <TextView
+                        android:id="@+id/maghrib"
+                        style="@style/Widget.TimeCol.Body"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:tag="@string/maghrib"
+                        android:text="0:00" />
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/Widget.TimeCol"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/Widget.TimeCol.Title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableBottom="@drawable/icon_isha_opt2"
+                        android:gravity="center"
+                        android:text="Isha" />
+
+                    <TextView
+                        android:id="@+id/isha"
+                        style="@style/Widget.TimeCol.Body"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:tag="Isha"
+                        android:text="0:00" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/alarm"
+                style="@style/Widget.Button.NextPrev"
+                android:layout_width="wrap_content"
+                android:layout_gravity="right"
+                android:text="@string/button_alarm_on" />
+        </LinearLayout>
+    </ScrollView>
+
+</android.support.v7.widget.CardView>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="separatorColor" format="color" />
+    <attr name="cardViewBackgroundColor" format="color" />
+    <attr name="buttonTextColor" format="color" />
+    <attr name="cardTitleBackground" format="reference" />
+    <attr name="rowWithSeparatorBackground" format="reference" />
+    <attr name="cellWithSeparatorBackground" format="reference" />
+</resources>
